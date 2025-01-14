@@ -1,51 +1,78 @@
+let timerCache = 0;
+let isRunningCache = false;
 
+const startTimerBtn = document.getElementById("start-timer");
+const pauseTimerBtn = document.getElementById("pause-timer");
+const resumeTimerBtn = document.getElementById("resume-timer");
+const resetTimerBtn = document.getElementById("reset-timer");
+const restTimerBtn = document.getElementById("rest-timer");
+const timeDisplay = document.getElementById("timer-display");
 
+chrome.storage.local.get(["timer", "isRunning"], (res) => {
+    timerCache = res.timer || 0;
+    isRunningCache = res.isRunning || false;
+    updateTime();
+    updateButtonState();
+});
 
-
-const startTimerBtn = document.getElementById("start-timer")
+// timer btns
 startTimerBtn.addEventListener("click", () => {
-    chrome.storage.local.get(["isRunning"], (res) => {
-        chrome.storage.local.set({
-            isRunning: !res.isRunning,
-        }, () => {
-            startTimerBtn.textContent = !res.isRunning ? "Pause Timer" : "Resume Timer";
-            resetTimerBtn.style.display = "inline-block";
-            restTimerBtn.style.display = "none";
-        })
-    })
- })
-
-
-const resetTimerBtn = document.getElementById("reset-timer")
+    isRunningCache = true;
+    updateButtonState();
+    chrome.storage.local.set({ isRunning: isRunningCache });
+});
+pauseTimerBtn.addEventListener("click", () => {
+    isRunningCache = false;
+    updateButtonState();
+    chrome.storage.local.set({ isRunning: isRunningCache });
+});
+resumeTimerBtn.addEventListener("click", () => {
+    isRunningCache = true;
+    updateButtonState();
+    chrome.storage.local.set({ isRunning: isRunningCache });
+});
 resetTimerBtn.addEventListener("click", () => {
-        chrome.storage.local.set({
-            timer: 0,
-            isRunning: false,
-        }, () => {
-            startTimerBtn.textContent = "Start Timer";
-            resetTimerBtn.style.display = "none";
-            restTimerBtn.style.display = "inline-block";
-        })
-    })
-
+    timerCache = 0;
+    isRunningCache = false;
+    updateButtonState();
+    updateTime();
+    chrome.storage.local.set({ timer: timerCache, isRunning: isRunningCache });
+});
+// end timer btns
 
 function updateTime() {
-    chrome.storage.local.get(["timer"], (res) => {
-        const timeDisplay = document.getElementById("timer-display")
-        const minutes = `${25 - Math.ceil(res.timer / 60)}`.padStart(2, "0")
-        let seconds = "00"
-        if (res.timer % 60 != 0){
-         seconds = `${60 - res.timer % 60}`.padStart(2, "0")
-    }
-    timeDisplay.textContent = `${minutes}:${seconds}`   })
+    const minutes = `${25 - Math.ceil(timerCache / 60)}`.padStart(2, "0");
+    const seconds = `${60 - (timerCache % 60 || 60)}`.padStart(2, "0");
+    timeDisplay.textContent = `${minutes}:${seconds}`;
 }
 
-updateTime()
-setInterval(updateTime, 1000)
+function updateButtonState() {
+    if (timerCache === 0 && !isRunningCache) {
+        startTimerBtn.style.display = "inline-block";
+        pauseTimerBtn.style.display = "none";
+        resumeTimerBtn.style.display = "none";
+        resetTimerBtn.style.display = "none";
+        restTimerBtn.style.display = "inline-block";
+    } else if (isRunningCache) {
+        startTimerBtn.style.display = "none";
+        pauseTimerBtn.style.display = "inline-block";
+        resumeTimerBtn.style.display = "none";
+        resetTimerBtn.style.display = "inline-block";
+        restTimerBtn.style.display = "none";
+    } else {
+        startTimerBtn.style.display = "none";
+        pauseTimerBtn.style.display = "none";
+        resumeTimerBtn.style.display = "inline-block";
+        resetTimerBtn.style.display = "inline-block";
+        restTimerBtn.style.display = "none";
+    }
+}
 
-
-
-const restTimerBtn = document.getElementById("rest-timer")
-
+setInterval(() => {
+    if (isRunningCache) {
+        timerCache++;
+        updateTime();
+    }
+}, 1000);
 
 

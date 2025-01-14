@@ -1,23 +1,27 @@
-chrome.alarms.create("pomodoroTimer", {
-    periodInMinutes: 1 / 60,
-})
-
-chrome.alarms.onAlarm.addListener((alarm) => {
-    if (alarm.name === "pomodoroTimer") {
-        chrome.storage.local.get(["timer", "isRunning"], (res) => {
-            if (res.isRunning) {
-                let timer = res.timer + 1
-                chrome.storage.local.set({
-                    timer,
-                })
-            }
-        })
-    }
-})
+let timer = 0;
+let isRunning = false;
 
 chrome.storage.local.get(["timer", "isRunning"], (res) => {
-    chrome.storage.local.set({
-        timer: "timer" in res ? res.timer : 0,
-        isRunning: "isRunning" in res ? res.isRunning : false,
-    })
-})
+    timer = res.timer || 0;
+    isRunning = res.isRunning || false;
+});
+
+chrome.alarms.create("pomodoroTimer", {
+    periodInMinutes: 1 / 60,
+});
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === "pomodoroTimer" && isRunning) {
+        timer++;
+        chrome.storage.local.set({ timer });
+    }
+});
+
+chrome.storage.onChanged.addListener((changes) => {
+    if (changes.isRunning) {
+        isRunning = changes.isRunning.newValue;
+    }
+    if (changes.timer) {
+        timer = changes.timer.newValue;
+    }
+});
