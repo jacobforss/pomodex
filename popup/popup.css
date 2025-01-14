@@ -1,0 +1,105 @@
+
+
+@font-face {
+    font-family: 'regularspace';
+    src: url('./fonts/SpaceGrotesk-Regular.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'mediumspace';
+    src: url('./fonts/SpaceGrotesk-Medium.ttf') format('woff2');
+    font-weight: medium;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'cufel';
+    src: url('./fonts/CUFEL.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+:root {
+    --white: #fff;
+    --bordergrey: #F0F2F5; 
+    --midgrey: #FAFAFA; 
+    --textgrey: #D2D7E6; 
+    --success: #93D77E; 
+
+}
+body {
+    background-color: var(--white);
+    font-family: regularspace;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 512px;
+    height: auto;
+    /* height 420 */
+    padding: 20px;
+    border: 2px solid var(--bordergrey);
+    border-radius: 20px;
+}
+
+
+/* button */
+button {
+    all: unset;
+    display: inline-block;
+    cursor: pointer;
+    padding: 8px 12px;
+    font-family: mediumspace;
+    background-color: var(--midgrey);
+    border: 2px solid var(--bordergrey);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-top: 20px;
+  }
+
+  button:hover {
+    background-color: var(--bordergrey);
+  }
+  /* end of button */
+
+  /* pomodoro */
+.pokemon-wrapper {
+    padding-top: 64px;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+}
+.pokemon-image {
+    width: 88px;
+    height: 88px;
+    object-fit: contain; 
+}
+.timer-btn-wrapper {
+    display: flex; 
+    flex-direction: row;
+    gap: 8px;
+}
+.timer-wrapper {
+    padding-top: 32px;
+    position: relative;
+    align-items: center;
+    height: 40px;
+    width: 200px;
+}
+.timer {
+    position: absolute;
+    left: 50%;        
+    transform: translateX(-50%); 
+    bottom: -16px;
+    color: var(--textgrey);
+    margin-top: -40 px;
+    font-family: cufel;
+    font-size: 80px;
+    letter-spacing: -1px;
+}
+.status-p {
+    text-wrap: nowrap;
+}
+/* end of pomodoro */

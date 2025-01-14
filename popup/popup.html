@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodex</title>
+    <link rel="stylesheet" href="/popup/popup.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="pokemon-wrapper">
+        <img id="pokemon-sprite" class="pokemon-image" src="" alt="pokemon" />
+        <p id="status-p"></p>
+        <div class="timer-wrapper">
+          <div class="timer" id="timer-display">25:00</div>
+        </div>
+      </div>
+      <div class="timer-btn-wrapper">
+        <button id="start-timer">Start Timer</button>
+        <button id="rest-timer">Rest 5 Min</button>
+        <button id="reset-timer" style="display: none">Reset Timer</button>
+        <button id="register-pokedex" style="display: none">
+          Register to Pokedex
+        </button>
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
